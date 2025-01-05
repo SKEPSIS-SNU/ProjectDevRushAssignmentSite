@@ -6,7 +6,6 @@ import { Assignment } from "@/models/assignment.model";
 import { User } from "@/models/user.model";
 import dbConnect from "@/lib/dbConnect";
 
-// Type for the request body
 interface SubmissionRequest {
   assignmentId: string;
   userId: string;
@@ -29,7 +28,10 @@ export async function POST(request: NextRequest) {
     // Validate required fields
     if (!assignmentId || !userId || !links) {
       return NextResponse.json(
-        { error: "Missing required fields" },
+        {
+          success: false,
+          message: "Missing required fields",
+        },
         { status: 400 }
       );
     }
@@ -40,7 +42,10 @@ export async function POST(request: NextRequest) {
       !mongoose.Types.ObjectId.isValid(userId)
     ) {
       return NextResponse.json(
-        { error: "Invalid assignmentId or userId format" },
+        {
+          success: false,
+          message: "Invalid assignmentId or userId format",
+        },
         { status: 400 }
       );
     }
@@ -49,7 +54,10 @@ export async function POST(request: NextRequest) {
     const assignment = await Assignment.findById(assignmentId);
     if (!assignment) {
       return NextResponse.json(
-        { error: "Assignment not found" },
+        {
+          success: false,
+          message: "Assignment not found",
+        },
         { status: 404 }
       );
     }
@@ -57,7 +65,13 @@ export async function POST(request: NextRequest) {
     // Check if user exists
     const user = await User.findById(userId);
     if (!user) {
-      return NextResponse.json({ error: "User not found" }, { status: 404 });
+      return NextResponse.json(
+        {
+          success: false,
+          message: "User not found",
+        },
+        { status: 404 }
+      );
     }
 
     // Check if user has already submitted this assignment
@@ -68,7 +82,10 @@ export async function POST(request: NextRequest) {
 
     if (existingSubmission) {
       return NextResponse.json(
-        { error: "User has already submitted this assignment" },
+        {
+          success: false,
+          message: "User has already submitted this assignment",
+        },
         { status: 400 }
       );
     }
@@ -100,15 +117,27 @@ export async function POST(request: NextRequest) {
 
     return NextResponse.json(
       {
+        success: true,
         message: "Submission created successfully",
-        submission,
+        data: {
+          submission: {
+            id: submission._id,
+            assignmentId: submission.assignmentId,
+            userId: submission.userId,
+            status: submission.status,
+            links: submission.links,
+          },
+        },
       },
       { status: 201 }
     );
   } catch (error) {
     console.error("Submission error:", error);
     return NextResponse.json(
-      { error: "Internal server error" },
+      {
+        success: false,
+        message: "Internal server error",
+      },
       { status: 500 }
     );
   }
