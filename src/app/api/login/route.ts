@@ -1,4 +1,4 @@
-// app/api/submissions/route.ts
+// app/api/login/route.ts
 import { NextRequest, NextResponse } from "next/server";
 import { User } from "@/models/user.model";
 import dbConnect from "@/lib/dbConnect";
