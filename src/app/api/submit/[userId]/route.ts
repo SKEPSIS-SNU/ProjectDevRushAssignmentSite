@@ -5,6 +5,7 @@ import dbConnect from "@/lib/dbConnect";
 
 export async function GET(
   _request: NextRequest,
+  _response: NextResponse,
   { params }: { params: { userId: string } }
 ) {
   try {
