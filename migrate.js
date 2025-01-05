@@ -3,7 +3,7 @@ const fs = require("fs");
 const { MongoClient } = require("mongodb");
 
 // MongoDB connection URI - Update with your connection string
-const uri = "mongodb+srv://roy2:0Muq4Z8B0WswEpdg@cluster0.eewrr.mongodb.net/";
+const uri = "";
 const dbName = "project_db"; // Update with your database name
 const collectionName = "users";
 

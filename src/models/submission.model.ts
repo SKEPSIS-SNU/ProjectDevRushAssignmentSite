@@ -12,9 +12,9 @@ const submissionSchema = new Schema<SubmissionDocument>(
     },
     status: { type: Number, required: true },
     links: {
-      github: { type: String, required: true },
-      kaggle: { type: String, required: true },
-      website: { type: String, required: true },
+      github: { type: String },
+      kaggle: { type: String },
+      website: { type: String },
     },
     userId: { type: Schema.Types.ObjectId, ref: "User", required: true },
   },
